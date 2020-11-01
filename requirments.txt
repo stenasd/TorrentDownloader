@@ -1,0 +1,3 @@
+python-qbittorrent
+mysql-connector-python
+moviepy
