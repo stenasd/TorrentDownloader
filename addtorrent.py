@@ -1,7 +1,7 @@
 
 #returns name if torrents downloaded
 def addmagnet(apiclient,magnet):
-    apiclient.torrents_add(urls=magnet, save_path='..../',is_root_folder=True)
+    apiclient.torrents_add(urls=magnet,is_root_folder=True)
     #print("torrent added")
 def getfoldername(apiclient,magnet):
     for torrent in apiclient.torrents_info():
@@ -15,10 +15,10 @@ def getfoldername(apiclient,magnet):
             print("match")
             return torrent.name
             #https://stackoverflow.com/questions/42541748/rename-and-move-file-with-python
-def getcompletedtorrents(apiclient):
-    return True
+#def getcompletedtorrents(apiclient):
+    #return True
     #return list of completed torrents
-def removeFromToDownload(apiclient):
+#def removeFromToDownload(apiclient):
 
     #removes and add to toprepare
             

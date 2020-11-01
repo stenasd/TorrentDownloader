@@ -11,21 +11,29 @@ import shutil
 
 def converttomp4(file,newname):
     clip = moviepy.VideoFileClip(file)
-    clip.write_videofile(newname+".mp4") 
+    clip.write_videofile(newname+".mp4")
+    shutil.move(newname+".mp4", './movies/'+newname+".mp4")
+
+
+    
+    
 
 #torrentfolder will raname and move if mp4 and convert to mp4 then rename and move
-def convertandmovetorrent(torrentfolder,movieobj):
-    onlyfiles = [f for f in listdir(torrentfolder) if isfile(join(".", f)) ]
-    for files in onlyfiles:
-        print(os.stat(files).st_size)
+def convertandmovetorrent(torrentfolder):
+    onlyfiles = listdir(torrentfolder)
+    for files1 in onlyfiles:
+        files = os.path.join(torrentfolder, files1)
         print("py"in files)
         print(files)
-        #moveobj.toprepare move and rename based on 
+        #comaprefile and if it contains pathname then
         if os.stat(files).st_size >100000000:
+            if "mkv"in files:
+                converttomp4(files,torrentfolder)
             if "avi"in files:
                 #converttomp4 move and delete old files 
                 print("movietoconvert")
                 #converttomp4(files,"bigdick")
             if "mp4"in files:
-                shutil.move('bigdick.mp4', 'mp4folder')
-convertandmovetorrent(".",True)
+                shutil.move(files, './movies/'+torrentfolder+".mp4")
+        
+ #(".",True)
