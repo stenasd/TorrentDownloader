@@ -1,5 +1,3 @@
-
-#get data from undownloaded 
 def getdata(cursor,iden):
     movieobjects=[]
     query = ("SELECT path, name, magnet,id FROM movieList WHERE id = %s")
@@ -12,14 +10,13 @@ def getdata(cursor,iden):
 #set everything except id
 #objtosetdatafrom
 def setdata(cursor,movieobj):
-    query = ("UPDATE movieList SET path = %s,name = %s,magnet = %s, WHERE id = %s")
+    query = ("UPDATE movieList SET path = %s,name = %s,magnet = %s WHERE id = %s")
     val = (movieobj.Path, movieobj.Name, movieobj.Hash ,movieobj.Id)
-    cursor.execute(sql, val)
+    cursor.execute(query, val)
     emp_no = cursor.lastrowid
-    cnx.commit()
 def getnodownl(cursor):
     nodownloadarr=[]
-    query = ("SELECT id FROM todownload")
+    query = ("SELECT id FROM nodownload")
     cursor.execute(query)
     for Id in cursor:
         nodownloadarr.append(Id)
@@ -61,14 +58,3 @@ class movies:
     self.Path = Path
     self.Hash=Hash
   
-
-
-
-
-
-
-
-            
-
-
-

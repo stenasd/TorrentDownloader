@@ -1,3 +1,5 @@
 python-qbittorrent
+qbittorrent-api
 mysql-connector-python
 moviepy
+schedule
