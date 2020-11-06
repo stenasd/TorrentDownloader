@@ -26,11 +26,11 @@ def convertandmovetorrent(torrentfolder):
         print("py"in files)
         print(files)
         #comaprefile and if it contains pathname then
-        if os.stat(files).st_size >100000000:
+        if os.stat(files).st_size >50000000:
             if "mkv"in files:
                 converttomp4(files,torrentfolder)
             if "avi"in files:
-                #converttomp4 move and delete old files 
+                converttomp4(files,torrentfolder)
                 print("movietoconvert")
                 #converttomp4(files,"bigdick")
             if "mp4"in files:

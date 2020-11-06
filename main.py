@@ -7,6 +7,21 @@ import addtorrent
 import tomp4
 import schedule
 import time
+cnx = mysql.connector.connect(
+    host="127.0.0.1",
+    port=3306,
+    user="root",
+    password="root",
+    database='movies')
+
+qbt_client = qbittorrentapi.Client(host='localhost:8080', username='admin', password='adminadmin')
+
+try:
+    qbt_client.auth_log_in()
+except qbittorrentapi.LoginFailed as e:
+    print(e)
+
+
 #todo creat movie obj class and test set data
 def startconverter():  
     for torrent in qbt_client.torrents_info():
@@ -23,8 +38,6 @@ def startconverter():
         #foldername match movieobj id
         #if torrent ==-1 send torrent name to converttorrent
 def starttorrentadder():
-    for torrent in qbt_client.torrents_info():
-        print(f'{torrent.hash[-6:]}: {torrent.name} ({torrent.state})')
     getnodownlarr = mysqldatabase.getnodownl(cnx.cursor())
     for x in getnodownlarr:
         moviearr = mysqldatabase.getdata(cnx.cursor(),x[0])
@@ -34,26 +47,10 @@ def starttorrentadder():
             mysqldatabase.setdata(cnx.cursor(),x)
             cnx.commit()
             print(x.Hash) 
-
-
-def job():
-    print("I'm working...")
-torrentpath = "pathtotorrent"
-readymoviepath="pathtoreadymovie"
-cnx = mysql.connector.connect(
-    host="127.0.0.1",
-    port=3306,
-    user="root",
-    password="root",
-    database='movies')
-
-qbt_client = qbittorrentapi.Client(host='localhost:8080', username='admin', password='adminadmin')
-
-try:
-    qbt_client.auth_log_in()
-except qbittorrentapi.LoginFailed as e:
-    print(e)
-schedule.every(1).minutes.do(starttorrentadder)
+startconverter()
+for torrent in qbt_client.torrents_info():
+    print(addtorrent.getfoldername(qbt_client,torrent.hash))
+#schedule.every(1).minutes.do(starttorrentadder)
 while True:
     schedule.run_pending()
     time.sleep(1)
