@@ -11,10 +11,10 @@ cnx = mysql.connector.connect(
     host="127.0.0.1",
     port=3306,
     user="root",
-    password="root",
+    password="",
     database='movies')
-
-qbt_client = qbittorrentapi.Client(host='localhost:8080', username='admin', password='adminadmin')
+#TODO remove from nodownload table
+qbt_client = qbittorrentapi.Client(host='localhost:8080', username='admin', password='')
 
 try:
     qbt_client.auth_log_in()
@@ -24,6 +24,7 @@ except qbittorrentapi.LoginFailed as e:
 
 #todo creat movie obj class and test set data
 def startconverter():  
+    print("startconverter started")
     for torrent in qbt_client.torrents_info():
         print(f'{torrent.availability}: {torrent.name} ')
         if torrent.availability == -1:  
@@ -38,6 +39,7 @@ def startconverter():
         #foldername match movieobj id
         #if torrent ==-1 send torrent name to converttorrent
 def starttorrentadder():
+    print("starttorrentadder started")
     getnodownlarr = mysqldatabase.getnodownl(cnx.cursor())
     for x in getnodownlarr:
         moviearr = mysqldatabase.getdata(cnx.cursor(),x[0])
@@ -46,11 +48,22 @@ def starttorrentadder():
             x.Path = addtorrent.getfoldername(qbt_client,x.Hash)
             mysqldatabase.setdata(cnx.cursor(),x)
             cnx.commit()
-            print(x.Hash) 
-startconverter()
-for torrent in qbt_client.torrents_info():
-    print(addtorrent.getfoldername(qbt_client,torrent.hash))
-#schedule.every(1).minutes.do(starttorrentadder)
+            print(x.Hash)
+def starttorrentadder1():
+    print("starttorrentadder started")
+    getnodownlarr = mysqldatabase.getnodownl(cnx.cursor())
+    for x in getnodownlarr:
+        moviearr = mysqldatabase.getdata(cnx.cursor(),x[0])
+        for x in moviearr:
+            #a = addtorrent.addmagnet(qbt_client,x.Hash)
+            x.Path = addtorrent.getfoldername(qbt_client,x.Hash)
+            print(x.Path)
+            #mysqldatabase.setdata(cnx.cursor(),x)
+            #cnx.commit()
+           
+starttorrentadder1()
+#schedule.every(5).minutes.do(starttorrentadder)
+#schedule.every().hour.do(startconverter)
 while True:
     schedule.run_pending()
     time.sleep(1)
