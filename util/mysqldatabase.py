@@ -24,11 +24,9 @@ def getnodownl(cursor):
 def gettoprepare(cursor):
     nodownloadarr=[]
     query = ("SELECT id FROM todownload")
-    
     cursor.execute(query)
     for Id in cursor:
-        nodownloadarr.append(Id)
-       
+        nodownloadarr.append(Id)      
     return nodownloadarr
 def getdatafrompath(cursor,iden):
     movieobjects=[]
