@@ -13,7 +13,7 @@ cnx = mysql.connector.connect(
     user="root",
     password="stenroot",
     database='movies')
-#TODO remove from nodownload table
+#TODO check nodownload from table and outcome from running long time
 qbt_client = qbittorrentapi.Client(host='localhost:8080', username='admin', password='stenadmin')
 
 try:
@@ -52,17 +52,19 @@ def starttorrentadder():
             print(x.Hash)
 def starttorrentadder1():
     print("starttorrentadder started")
+    #remove from nodownload
     getnodownlarr = mysqldatabase.getnodownl(cnx.cursor())
     for x in getnodownlarr:
         moviearr = mysqldatabase.getdata(cnx.cursor(),x[0])
         for x in moviearr:
             #a = addtorrent.addmagnet(qbt_client,x.Hash)
+            mysqldatabase.deltodownload(cnx.cursor(),x[0].Id)
             x.Path = addtorrent.getfoldername(qbt_client,x.Hash)
             print(x.Path)
             #mysqldatabase.setdata(cnx.cursor(),x)
             #cnx.commit()
-startconverter()         
 #starttorrentadder()
+startconverter()         
 #schedule.every(5).minutes.do(starttorrentadder)
 #schedule.every().hour.do(startconverter)
 while True:
